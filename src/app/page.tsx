@@ -6,6 +6,7 @@ import Bar from "@/components/NavBar/Search_bar";
 
 
 
+
 export default function Home () {
     
     return (
@@ -21,7 +22,7 @@ export default function Home () {
             fill
             priority
             className="object-cover"
-            sizes="100vw"
+            sizes= "100vw"
             />
 
 
