@@ -11,13 +11,17 @@ import Candidato from "@/models/Candidato";
 import Empresa from "@/models/Empresa";
 import Vaga from "@/models/Vaga";
 
+
+
 // --- AÇÃO DE REGISTRO ---
 export async function registerUser(formData: FormData) {
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+  const role = formData.get("role") as string;
 
-  if (!name || !email || !password) return { error: "Preencha tudo!" };
+  if (!name || !email || !password || !role)
+    return { error: "Preencha todos os campos!" };
 
   await dbConnect();
 
@@ -25,11 +29,36 @@ export async function registerUser(formData: FormData) {
   const existingUser = await User.findOne({ email });
   if (existingUser) return { error: "Email já cadastrado" };
 
-  // Cria hash da senha
+  // Criptografa senha
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  await User.create({ name, email, password: hashedPassword });
-  return { success: true };
+  // Cria User
+  const user = await User.create({
+    name,
+    email,
+    password: hashedPassword,
+    role,
+  });
+
+  // --- Criar perfil automaticamente ---
+  if (role === "criarCandidato") {
+    await Candidato.create({
+      nome: name,
+      curriculo: formData.get("curriculo") || "",
+      userId: user._id,
+    });
+  }
+
+  if (role === "empresa") {
+    await Empresa.create({
+      nome: name,
+      descricao: formData.get("descricao") || "",
+      area_atuacao: formData.get("area_atuacao") || "",
+      userId: user._id,
+    });
+  }
+
+  return { success: true, id: user._id };
 }
 
 
