@@ -5,8 +5,6 @@ import User from "@/models/User";
 
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import Candidato from "@/models/Candidato";
 import Empresa from "@/models/Empresa";
 import Vaga from "@/models/Vaga";
@@ -58,7 +56,7 @@ export async function registerUser(formData: FormData) {
     });
   }
 
-  return { success: true, id: user._id };
+  return { success: true, id: user._id .toString() };
 }
 
 
