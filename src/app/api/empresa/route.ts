@@ -45,7 +45,7 @@ export async function GET() {
         return NextResponse.json(empresas);
     } catch (error: any) {
         return NextResponse.json(
-        { error: "Erro ao buscar empresas" },
+        { error: "Erro ao buscar empresas"},
         { status: 500 }
         );
     }

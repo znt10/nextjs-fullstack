@@ -15,14 +15,16 @@ export default function Home () {
         {/* Hero Section */}
         <section className="relative w-full h-[545px] flex items-center justify-center text-white pt-20">
         {/* Imagem de fundo */}
-            <Image
+        <Image
             src="https://i.imgur.com/l4K7Wzm.jpeg"
             alt="JobConnect Banner"
             fill
-            className="object-cover"
             priority
-            sizes="(max-width: 768px) 100vw, 100vw"
+            className="object-cover"
+            sizes="100vw"
             />
+
+
 
 
         {/* Conteúdo centralizado */}

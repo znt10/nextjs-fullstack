@@ -2,11 +2,14 @@
 
 import dbConnect from "@/lib/db";
 import User from "@/models/User";
-import Product from "@/models/Product";
+
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import Candidato from "@/models/Candidato";
+import Empresa from "@/models/Empresa";
+import Vaga from "@/models/Vaga";
 
 // --- AÇÃO DE REGISTRO ---
 export async function registerUser(formData: FormData) {
@@ -29,45 +32,95 @@ export async function registerUser(formData: FormData) {
   return { success: true };
 }
 
-// --- AÇÃO DE CRIAR PRODUTO ---
-export async function addProduct(formData: FormData) {
-  const session = await getServerSession(authOptions);
-  if (!session) return { error: "Não autorizado" };
 
-  const nome = formData.get("nome");
-  const preco = formData.get("preco");
 
+// --- AÇÃO DE CANDIDATOS ---
+export async function listarCandidatos() {
   await dbConnect();
-  await Product.create({
-    nome,
-    preco: Number(preco),
-    usuarioId: (session.user as any).id
-  });
-
-  revalidatePath("/dashboard"); // Atualiza a lista instantaneamente
-  return { success: true };
+  const candidatos = await Candidato.find().lean();
+  return JSON.parse(JSON.stringify(candidatos));
 }
 
-// --- AÇÃO DE DELETAR PRODUTO ---
-export async function deleteProduct(formData: FormData) {
-  const id = formData.get("id");
+export async function criarCandidato(formData: FormData) {
   await dbConnect();
-  await Product.findByIdAndDelete(id);
-  revalidatePath("/dashboard");
+
+  const nome = formData.get("nome")?.toString();
+  const curriculo = formData.get("curriculo")?.toString();
+  const telefone = formData.get("telefone")?.toString();
+
+  if (!nome || !curriculo) {
+    throw new Error("Nome e currículo são obrigatórios.");
+  }
+
+  await Candidato.create({ nome, curriculo, telefone });
+
+  revalidatePath("/candidatos");
 }
 
-// --- AÇÃO DE ATUALIZAR PRODUTO ---
-export async function updateProduct(formData: FormData) {
-  const session = await getServerSession(authOptions);
-  if (!session) return { error: "Não autorizado" };
-
-  const id = formData.get("id");
-  const nome = formData.get("nome");
-  const preco = formData.get("preco");
-
+export async function deletarCandidato(id: string) {
   await dbConnect();
-  await Product.findByIdAndUpdate(id, { nome, preco: Number(preco) });
+  await Candidato.findByIdAndDelete(id);
+  revalidatePath("/candidatos");
+}
 
-  revalidatePath("/dashboard");
-  return { success: true };
+export async function atualizarCandidato(id: string, data: any) {
+  await dbConnect();
+  await Candidato.findByIdAndUpdate(id, data);
+}
+
+
+// --- AÇÃO DE empresa ---
+export async function listarEmpresas() {
+  await dbConnect();
+  const empresas = await Empresa.find().lean();
+  return JSON.parse(JSON.stringify(empresas));
+}
+
+export async function criarEmpresa(formData: FormData) {
+  await dbConnect();
+
+  const nome = formData.get("nome")?.toString();
+  const descricao = formData.get("descricao")?.toString();
+  const telefone = formData.get("telefone")?.toString();
+  if (!nome || !descricao) {
+    throw new Error("Nome e descrição são obrigatórios.");
+  }
+  await Empresa.create({ nome, descricao, telefone });
+
+}
+
+
+
+//--acao de vagas--//
+
+export async function listarvagas(){
+  await dbConnect();
+  const vagas = await Vaga.find().lean();
+  return JSON.parse(JSON.stringify(vagas));
+}
+
+
+export async function criarVaga(formData: FormData) {
+  await dbConnect();
+  const titulo = formData.get("titulo")?.toString();
+  const descricao = formData.get("descricao")?.toString();
+  const requisitos = formData.get("requisitos")?.toString();
+  if (!titulo || !descricao) {
+    throw new Error("Título e descrição são obrigatórios.");
+  }
+  await Vaga.create({ titulo, descricao, requisitos });
+  revalidatePath("/vervagas");
+}
+
+
+export async function deletarVaga(id: string) {
+  await dbConnect();
+  await Vaga.findByIdAndDelete(id);
+  revalidatePath("/vervagas");
+}
+
+export async function atualizarVaga(id: string, data: any) {
+  await dbConnect();
+  await Vaga.findByIdAndUpdate(id, data);
+  revalidatePath("/vervagas");
 }
