@@ -58,7 +58,7 @@ export default function VerVagas({ tipo, userId }: VerVagasProps) {
                         Nenhuma vaga disponível no momento.
                     </div>
                 ) : (
-                    <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                    <div className="flex flex-col gap-8">
                         {vagas.map((vaga: any, index) => {
                             // Verifica se o usuário logado é o dono da vaga
                             const isDonoDaVaga = isEmpresa && userId === vaga.empresaId;
@@ -66,7 +66,7 @@ export default function VerVagas({ tipo, userId }: VerVagasProps) {
                             return (
                                 <article
                                     key={vaga._id || index}
-                                    className="relative p-6 bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                                    className="relative p-6 bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 w-full"
                                 >
                                     {/* Botões de Ação (Só aparecem se for Empresa E for o Dono) */}
                                     {isDonoDaVaga && (
@@ -103,7 +103,7 @@ export default function VerVagas({ tipo, userId }: VerVagasProps) {
                                     </div>
 
                                     {!isEmpresa && (
-                                        <button className="w-full bg-gray-700 text-white font-bold text-sm py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                                        <button className="w-40 bg-gray-700 text-white font-bold text-xs py-2 rounded-md hover:bg-gray-800 transition-colors">
                                             Me candidatar
                                         </button>
                                     )}
