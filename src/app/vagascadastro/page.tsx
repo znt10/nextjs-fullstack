@@ -13,6 +13,7 @@ export default function VagasCadastro() {
     const [requisitos, setRequisitos] = useState("");
     const [descricao, setDescricao] = useState("");
     const [salario, setSalario] = useState("");
+    const [id , setId] = useState("");
     
     const router = useRouter();
 

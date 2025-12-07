@@ -131,13 +131,18 @@ export async function listarvagas(){
 
 export async function criarVaga(formData: FormData) {
   await dbConnect();
+  const session = await getServerSession(authOptions);
+  const id = session?.user?.id;
   const titulo = formData.get("titulo")?.toString();
   const descricao = formData.get("descricao")?.toString();
   const requisitos = formData.get("requisitos")?.toString();
+  const salario = formData.get("salario")?.toString();
+  
+
   if (!titulo || !descricao) {
     throw new Error("Título e descrição são obrigatórios.");
   }
-  await Vaga.create({ titulo, descricao, requisitos });
+  await Vaga.create({ titulo, descricao, requisitos,salario,empresaId: id });
   revalidatePath("/vervagas");
 }
 
