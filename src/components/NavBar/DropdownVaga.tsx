@@ -35,7 +35,7 @@ function DropdownMenuCustom() {
             >
                 
                     
-                    <DropdownItem key="cadastrar-vagas" onClick={() => navigate.push("/vagascadastro")}>
+                    <DropdownItem key="cadastrar-vagas" onClick={() => navigate.push("/vagas/cadastro")}>
                             Cadastrar Vagas
                         </DropdownItem>
                         <DropdownItem key="ver-vagas-empresa" onClick={() => navigate.push("/vervagas")}>

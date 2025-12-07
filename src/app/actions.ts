@@ -41,7 +41,7 @@ export async function registerUser(formData: FormData) {
   });
 
   // --- Criar perfil automaticamente ---
-  if (role === "criarCandidato") {
+  if (role === "candidato") {
     await Candidato.create({
       nome: name,
       curriculo: formData.get("curriculo") || "",

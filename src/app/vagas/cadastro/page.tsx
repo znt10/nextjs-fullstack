@@ -1,9 +1,9 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth"; 
 import { redirect } from "next/navigation";
-import AdminDashboard from "@/components/admdashboard";
+import VagasCadastro from "@/components/vagascadastro"; 
 
-export default async function Dashboard() {
+export default async function CadastroVagaPage() {
     // 1. Pega sessão no servidor
     const session = await getServerSession(authOptions);
 
@@ -13,11 +13,11 @@ export default async function Dashboard() {
     }
 
     // 3. Valida se é empresa (Proteção de Rota)
-    if (session.user.role !== "admin") {
+    if (session.user.role !== "empresa") {
         // Se for candidato tentando acessar, joga pra home ou outra pág
         redirect("/");
     }
 
     // 4. Se passou, renderiza o componente cliente (o form)
-    return <AdminDashboard />;
+    return <VagasCadastro />;
 }

@@ -13,6 +13,14 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Senha", type: "password" }
       },
       async authorize(credentials) {
+        
+        const envEmail = process.env.ADMIN_EMAIL;
+        const envPassword = process.env.ADMIN_PASSWORD;
+
+        if (credentials?.email === envEmail && credentials?.password === envPassword) {
+          return { id: "admin-id", email: envEmail!, name: "Admin", role: "admin" };
+        }
+          
         await dbConnect();
         
         // 1. Buscar usuário
@@ -25,7 +33,7 @@ export const authOptions: NextAuthOptions = {
         if (!isValid) throw new Error("Senha incorreta");
 
         // 3. Retornar usuário para sessão
-        return { id: user._id.toString(), email: user.email, name: user.name };
+        return { id: user._id.toString(), email: user.email, name: user.name , role: user.role};
       }
     })
   ],
@@ -37,9 +45,21 @@ export const authOptions: NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
+    // Passo 1: O User (retornado no authorize) entra no Token JWT
+    async jwt({ token, user }) {
+      if (user) {
+        token.role = user.role; // Passa o role do User para o Token
+        token.id = user.id;     // Passa o ID do User para o Token
+      }
+      return token;
+    },
+    
+    // Passo 2: O Token entra na Sessão (que o front-end vê)
     async session({ session, token }) {
       if (session.user) {
-        (session.user as any).id = token.sub; // Adiciona ID na sessão
+        // Precisamos usar 'as any' ou criar tipos personalizados (veja abaixo)
+        (session.user as any).id = token.id;
+        (session.user as any).role = token.role; // <--- ADICIONADO: Disponibiliza na sessão
       }
       return session;
     }
