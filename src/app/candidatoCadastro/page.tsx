@@ -8,18 +8,20 @@ import Image from "next/image";
 
 export default function CandidatoCadastro() {
     const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     async function handleSubmit(formData: FormData) {
         setLoading(true);
+        setErrorMessage("");
 
-        formData.set("role", "criarCandidato"); 
+        formData.set("role", "candidato"); 
 
         const result = await registerUser(formData);
 
         setLoading(false);
 
         if (result?.error) {
-            alert(result.error);
+            setErrorMessage(result.error); 
             return;
         }
 
@@ -29,13 +31,19 @@ export default function CandidatoCadastro() {
 
     return (
         <section id="section-signup-form" className="bg-white font-poppins">
-            <Bar />
+
 
             <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
 
                 {/* Formulário */}
                 <div className="flex flex-col justify-center items-center p-8 sm:p-12">
                     <div className="w-full max-w-md">
+                        {errorMessage && (
+                            <div className="mb-4 p-3 rounded-lg bg-red-100 text-red-700 border border-red-300">
+                                {errorMessage}
+                            </div>
+                        )}
+
 
                         <h1 className="text-[32px] font-medium text-black">Comece agora</h1>
                         <p className="mt-2 text-sm font-medium text-black">

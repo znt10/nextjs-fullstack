@@ -6,6 +6,7 @@ export interface IVaga extends Document {
     requisitos: string;
     salario: number;
     empresaId: mongoose.Types.ObjectId;
+    empresa_nome: string;
     }
 
     const VagaSchema = new Schema<IVaga>(
@@ -15,6 +16,7 @@ export interface IVaga extends Document {
         requisitos: { type: String, required: true },
         salario: { type: Number, required: true },
         empresaId: { type: Schema.Types.ObjectId, ref: "Empresa", required: true },
+        empresa_nome: { type: String, required: false },
     },
     { timestamps: true }
     );

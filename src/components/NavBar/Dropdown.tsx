@@ -4,6 +4,7 @@
 
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/dropdown";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 
 
@@ -44,7 +45,7 @@ function DropdownMenuCustom() {
                 <DropdownItem key="perfil" onClick={() => navigate.push("/login")}>Entrar</DropdownItem>
 
                 
-                <DropdownItem key="logout" color="danger" className="text-red-600 font-semibold"  onClick={handleLogout} >
+                <DropdownItem key="logout" color="danger" className="text-red-600 font-semibold"  onClick={() => signOut({ callbackUrl: "/" })} >
                     Sair
                 </DropdownItem>
             </DropdownMenu>

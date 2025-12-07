@@ -128,24 +128,45 @@ export async function listarvagas(){
   return JSON.parse(JSON.stringify(vagas));
 }
 
+// ... seus imports
 
 export async function criarVaga(formData: FormData) {
   await dbConnect();
   const session = await getServerSession(authOptions);
-  const id = session?.user?.id;
+  
+  // VERIFICAÇÃO DE SEGURANÇA
+  if (!session || !session.user) {
+      throw new Error("Usuário não autenticado");
+  }
+
+  const id = session.user.id;
+  
+  // 1. O CORREÇÃO AQUI: Use o operador || para ter um valor padrão
+  // Se session.user.name for null, usa "Empresa Confidencial"
+  const nomeEmpresa = session.user.name || "Empresa Confidencial";
+
   const titulo = formData.get("titulo")?.toString();
   const descricao = formData.get("descricao")?.toString();
   const requisitos = formData.get("requisitos")?.toString();
-  const salario = formData.get("salario")?.toString();
-  
+  // Converta o salário para Number, já que no seu Model é Number
+  const salario = Number(formData.get("salario")); 
 
   if (!titulo || !descricao) {
     throw new Error("Título e descrição são obrigatórios.");
   }
-  await Vaga.create({ titulo, descricao, requisitos,salario,empresaId: id });
+
+  // 2. Agora salvamos com segurança
+  await Vaga.create({ 
+      titulo, 
+      descricao, 
+      requisitos, 
+      salario, 
+      empresaId: id, 
+      empresa_nome: nomeEmpresa 
+  });
+  
   revalidatePath("/vervagas");
 }
-
 
 export async function deletarVaga(id: string) {
   await dbConnect();

@@ -4,16 +4,19 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Bar from "@/components/NavBar/Search_bar";
 import { criarVaga } from "@/app/actions"; // Sua server action
+import { useState } from "react";
 
 export default function VagasCadastro() {
     const router = useRouter();
+    const [errorMessage, setErrorMessage] = useState("");
 
     async function clientAction(formData: FormData) {
         // A action criarVaga já pega o ID da sessão internamente no servidor
         const result = await criarVaga(formData) as { error?: string } | undefined;
 
         if (result?.error) {
-            alert(result.error);
+            setErrorMessage(result.error); 
+            return;
         } else {
             alert("Vaga cadastrada com sucesso!");
             router.push("/vervagas");
@@ -27,8 +30,13 @@ export default function VagasCadastro() {
                 <div className="w-full grid grid-cols-1 lg:grid-cols-2">
 
                 {/* Form Column */}
-                <div className="flex flex-col justify-center items-center p-8 sm:p-12 lg:p-16">
+                <div className="flex flex-col justify-center items-center p-8 sm:p-12">
                     <div className="w-full max-w-md">
+                        {errorMessage && (
+                            <div className="mb-4 p-3 rounded-lg bg-red-100 text-red-700 border border-red-300">
+                                {errorMessage}
+                            </div>
+                        )}
                     {/* Header */}
                     <div className="mb-10">
                         <h1 className="text-black text-[32px] font-medium ">Cadastrar vaga</h1>
