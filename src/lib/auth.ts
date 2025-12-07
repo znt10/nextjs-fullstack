@@ -27,6 +27,9 @@ export const authOptions: NextAuthOptions = {
         if (!user) throw new Error("Usuário não encontrado");
 
         // 2. Verificar senha
+        if(!user.password) 
+          throw new Error("Usuário sem senha cadastrada");
+        
         const isValid = await bcrypt.compare(credentials!.password, user.password);
         if (!isValid) throw new Error("Senha incorreta");
 
