@@ -169,13 +169,26 @@ export async function criarVaga(formData: FormData) {
 }
 
 export async function deletarVaga(id: string) {
+    try {
+        await dbConnect();
+        await Vaga.findByIdAndDelete(id);
+        revalidatePath("/vervagas"); // Atualiza a lista na hora
+        return { success: true };
+    } catch (error) {
+        console.error(error);
+        throw new Error("Erro ao deletar");
+    }
+}
+
+export async function buscarVaga(id: string) {
   await dbConnect();
-  await Vaga.findByIdAndDelete(id);
-  revalidatePath("/vervagas");
+  const vaga = await Vaga.findById(id).lean();
+  return JSON.parse(JSON.stringify(vaga)); // remove ObjectId
 }
 
 export async function atualizarVaga(id: string, data: any) {
   await dbConnect();
   await Vaga.findByIdAndUpdate(id, data);
   revalidatePath("/vervagas");
-}
+  return { success: true };
+}  

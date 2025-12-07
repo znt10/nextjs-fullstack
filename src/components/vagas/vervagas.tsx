@@ -71,7 +71,7 @@ export default function VerVagas({ tipo, userId }: VerVagasProps) {
                                     {/* Botões de Ação (Só aparecem se for Empresa E for o Dono) */}
                                     {isDonoDaVaga && (
                                         <div className="absolute top-4 right-4 flex gap-2">
-                                            
+                                            <BtnEditar vagaId={vaga._id} />
                                             <BtnDeletar vagaId={vaga._id} />
                                         </div>
                                     )}

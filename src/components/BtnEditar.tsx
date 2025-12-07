@@ -14,7 +14,7 @@ function BtnEditar({ vagaId }: BtnEditarProps) {
     const navigate = useRouter();
 
     const handleEdit = () => {
-        navigate.push(`/editar/${vagaId}`);
+        navigate.push(`vagas/editar/${vagaId}`);
     };
     
     return (
