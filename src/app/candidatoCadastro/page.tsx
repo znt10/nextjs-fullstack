@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { registerUser } from "@/app/actions";
 import Link from "next/link";
-import Bar from "@/components/NavBar/Search_bar";
 import Image from "next/image";
 
 export default function CandidatoCadastro() {
