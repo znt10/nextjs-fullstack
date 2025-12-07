@@ -52,16 +52,16 @@ export default function VagasEditar({ params }: { params: Promise<{ id: string }
         e.preventDefault();
         setLoading(true);
 
-        // Criamos um FormData para enviar para a Server Action
-        const formData = new FormData();
-        formData.append("id", id);
-        formData.append("titulo", titulo);
-        formData.append("requisitos", requisitos);
-        formData.append("descricao", descricao);
-        formData.append("salario", salario);
+        // Criamos um objeto com os dados para enviar para a Server Action
+        const data = {
+            titulo,
+            requisitos,
+            descricao,
+            salario,
+        };
 
         try {
-            await atualizarVaga(formData);
+            await atualizarVaga(id, data);
             alert("Vaga atualizada com sucesso!");
             router.push("/vervagas");
         } catch (error) {
