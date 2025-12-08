@@ -9,7 +9,7 @@ function DropdownMenuCustom() {
     return (
         <Dropdown placement="bottom-end">
             <DropdownTrigger>
-                <button className="text-white px-2 py-1 hover:text-yellow-300 transition-colors flex items-center gap-2">
+                <button className="text-white px-2 py-1 hover:text-yellow-300 transition-colors flex items-center gap-2 cursor-pointer">
                     Vagas
                 </button>
             </DropdownTrigger>

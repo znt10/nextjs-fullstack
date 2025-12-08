@@ -10,7 +10,7 @@ export default function Bar() {
       <div className="flex items-center gap-6 bg-gray-800/60 backdrop-blur-md p-4 rounded-xl shadow-xl border border-white/10">
 
         <Link
-          href="/dashboard"
+          href="/"
           className="text-white px-2 py-1 hover:text-yellow-300 transition-colors"
         >
           Home
