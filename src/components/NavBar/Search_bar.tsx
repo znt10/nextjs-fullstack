@@ -3,8 +3,15 @@
 import Link from "next/link";
 import Dropdown from "./Dropdown";
 import DropdownVaga from "./DropdownVaga";
+import { useSession } from "next-auth/react";
 
 export default function Bar() {
+
+  const { status } = useSession(); 
+
+  const session = status === "authenticated"
+
+
   return (
     <nav className="bg-transparent fixed w-full z-50 py-4 px-8 flex justify-end items-center">
       <div className="flex items-center gap-6 bg-gray-800/60 backdrop-blur-md p-4 rounded-xl shadow-xl border border-white/10">
@@ -34,9 +41,15 @@ export default function Bar() {
           Empresas
         </Link>
 
-        <div className="px-2 py-1">
-          <Dropdown />
-        </div>
+        {session? null:(
+          <Link
+            href="/login"
+            className="text-white px-2 py-1 hover:text-yellow-300 transition-colors"
+          >
+            Entrar
+          </Link>
+        )}
+        {session ? <Dropdown /> : null}
 
       </div>
     </nav>

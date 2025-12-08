@@ -65,7 +65,7 @@ function DropdownMenuCustom() {
 
             {/* --- CASO 3: LOGADO COMO USUÁRIO COMUM --- */}
             {isLoggedIn && !isAdmin ? (
-                <DropdownItem key="meus-dados" onClick={() => router.push("/dados")}>
+                <DropdownItem key="meus-dados" onClick={() => router.push("/meus-dados")}>
                     Meus Dados
                 </DropdownItem>
             ) : null}
