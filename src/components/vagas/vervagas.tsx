@@ -96,6 +96,7 @@ export default function VerVagas({ tipo, userId }: VerVagasProps) {
                                             <strong className="text-gray-800">Requisitos:</strong>{" "}
                                             {vaga.requisitos || "Não especificado"}
                                         </p>
+                                        <br />
                                         <p>
                                             <strong className="text-gray-800">Salário:</strong>{" "}
                                             {vaga.salario ? `R$ ${vaga.salario}` : "A combinar"}
