@@ -10,6 +10,8 @@ import { authOptions } from "@/lib/auth";
 import Candidato from "@/models/Candidato";
 import Empresa from "@/models/Empresa";
 import Vaga from "@/models/Vaga";
+import { redirect } from "next/navigation";
+import crypto from "crypto";
 
 
 
@@ -192,3 +194,68 @@ export async function atualizarVaga(id: string, data: any) {
   revalidatePath("/vervagas");
   return { success: true };
 }  
+
+
+export async function redifinirSenha(token: string, formData: FormData) {
+  const novaSenha = formData.get("newPassword") as string;
+  const confirmarSenha = formData.get("confirmPassword") as string;
+
+  if (!novaSenha || !confirmarSenha) {
+    return { error: "Por favor, preencha todos os campos." };
+  }
+
+  await dbConnect();
+
+
+  const user = await User.findOne({
+    resetPasswordToken: token,
+    resetPasswordExpires: { $gt: new Date() },
+  }).select("+password + resetPasswordToken + resetPasswordExpires");
+
+  if (!user) {
+    redirect("/login?error=token-expirado");
+  }
+
+  const hashedPassword = await bcrypt.hash(novaSenha, 10);
+
+  user.password = hashedPassword;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpires = undefined;
+  await user.save();
+  
+  redirect('/login?message=senha-resetada');
+}
+
+export async function solicitarRecuperacao(formData: FormData) {
+  const email = formData.get("email") as string;
+  await dbConnect();
+
+  const user = await User.findOne({ email });
+  
+  if (!user) {
+    return { success: true, message: "Se o usuário existir, o link foi gerado (veja no console)." };
+  }
+
+  // 1. Gera o token e data de expiração
+  const token = crypto.randomBytes(20).toString("hex");
+  const now = new Date();
+  now.setHours(now.getHours() + 1); // Expira em 1 hora
+
+
+  user.resetPasswordToken = token;
+  user.resetPasswordExpires = now;
+  await user.save();
+
+  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+  
+
+  const link = `${baseUrl}/reset-password/${token}`;
+  
+
+  console.log("========================================");
+  console.log("🔐 LINK DE RECUPERAÇÃO GERADO:");
+  console.log(link);
+  console.log("========================================");
+
+  return { success: true, message: "Link gerado! Verifique o terminal do VS Code." };
+}

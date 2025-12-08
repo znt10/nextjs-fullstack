@@ -1,3 +1,4 @@
+import { select } from "@heroui/react";
 import mongoose, { Schema, models, model, Document } from "mongoose";
 
 // 1. Defina a Interface (Tipagem)
@@ -6,6 +7,10 @@ export interface IUser extends Document {
   password?: string; // Opcional pq no select: false ele pode não vir
   name: string;
   role: "candidato" | "empresa";
+
+  resetPasswordToken?: string;
+  resetPasswordExpires?: Date;
+
   createdAt: Date;
   updatedAt: Date;
 }
@@ -13,14 +18,17 @@ export interface IUser extends Document {
 const UserSchema = new Schema<IUser>({
   email: { type: String, required: true, unique: true },
   
-  // select: false é ÓTIMO para segurança (evita vazar senha em buscas normais)
-  // Lembre-se de usar .select("+password") no NextAuth
+
   password: { type: String, required: true, select: false },
   
   name: { type: String, required: true },
   
-  // Garante que só entra texto válido
+
   role: { type: String, enum: ["candidato", "empresa"], required: true },
+
+  //para mudar senha
+  resetPasswordToken: {type: String, select: false},
+  resetPasswordExpires: {type: Date, select: false},
 }, { timestamps: true });
 
 // O padrão Singleton para Next.js
