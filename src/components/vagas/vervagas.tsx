@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Bar from "@/components/NavBar/Search_bar";
-import { listarvagas } from "@/app/actions"; 
+import { listarvagas } from "@/app/actions";
 import BtnDeletar from "@/components/BtnDeletar";
 import BtnEditar from "@/components/BtnEditar"; // Supondo que você tenha esse import
 
 interface VerVagasProps {
-    tipo: string; 
+    tipo: string;
     userId: string | null | undefined; // Nova prop para receber o ID
 }
 
@@ -42,11 +41,7 @@ export default function VerVagas({ tipo, userId }: VerVagasProps) {
 
     return (
         <>
-            <div className="fixed top-0 left-0 z-50 w-full">
-                <Bar />
-            </div>
-
-            <section className="mt-28 px-6 max-w-7xl mx-auto pb-10">
+            <section className="px-6 max-w-7xl mx-auto pb-10 pt-8">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
                     <h1 className="text-4xl font-extrabold text-gray-900 mb-4 md:mb-0">
                         Vagas Disponíveis
@@ -75,15 +70,15 @@ export default function VerVagas({ tipo, userId }: VerVagasProps) {
                                             <BtnDeletar vagaId={vaga._id} />
                                         </div>
                                     )}
-                                    
+
                                     {/* Restante do card... */}
                                     <div className="mb-4 pr-10">
                                         <h2 className="text-2xl font-semibold text-gray-900 break-words">
                                             {vaga.titulo}
                                         </h2>
                                         <p className="text-sm text-gray-500 mt-1">
-                                        {/* Se vaga.empresa_nome não existir, mostra o texto padrão */}
-                                        {vaga.empresa_nome || "Empresa Confidencial"} 
+                                            {/* Se vaga.empresa_nome não existir, mostra o texto padrão */}
+                                            {vaga.empresa_nome || "Empresa Confidencial"}
                                         </p>
                                     </div>
 

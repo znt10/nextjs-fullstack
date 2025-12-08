@@ -3,17 +3,17 @@ import Image from "next/image";
 export default function Rodape() {
     return (
         <footer className="bg-gray-700 text-white mt-auto py-10 px-8">
-            
+
             <div className="grid md:grid-cols-3 gap-8">
 
                 {/* Coluna 1 */}
                 <div>
                     <h3 className="text-lg font-semibold mb-2">Navegação</h3>
                     <ul className="space-y-2 text-sm">
-                        <li>Home</li>
-                        <li>Ver Vagas Disponíveis</li>
-                        <li>Cadastrar-se como Candidato</li>
-                        <li>Cadastrar-se como Empresa</li>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/vervagas">Ver Vagas Disponíveis</a></li>
+                        <li><a href="/candidatoCadastro">Cadastrar-se como Candidato</a></li>
+                        <li><a href="/empresaCadastro">Cadastrar-se como Empresa</a></li>
                         <li>Sobre nós</li>
                     </ul>
                 </div>
