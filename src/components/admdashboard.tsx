@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { BarChart3, Users, Briefcase, Settings, LogOut } from "lucide-react";
-import Link from "next/link";
+import { BarChart3, Users, Briefcase, Settings } from "lucide-react";
 import ListaC from "@/components/Adm/ListaAdm/ListaCandidatoAdm";
 import ListaE from "@/components/Adm/ListaAdm/ListaEmpresaAdm";
 import CardCandidato from "@/components/Adm/CardAdm/CardCandidato";
@@ -17,12 +16,6 @@ export default function AdminDashboard() {
             {/* Topbar */}
             <header className="bg-gray-600 text-white p-4 flex justify-between items-center shadow-md">
                 <h1 className="text-2xl font-bold">Painel Administrativo</h1>
-                <Link href="/">
-                    <button className="flex items-center gap-2 hover:text-gray-200">
-                        <LogOut className="w-5 h-5" />
-                        Sair
-                    </button>
-                </Link>
             </header>
 
             <div className="flex flex-1">

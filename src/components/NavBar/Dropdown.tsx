@@ -2,52 +2,87 @@
 
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/dropdown";
 import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react"; // 1. Importar useSession
 
 function DropdownMenuCustom() {
-  const navigate = useRouter();
+    const router = useRouter();
+    const { data: session, status } = useSession(); // 2. Pegar dados da sessão
 
-  return (
-    <Dropdown placement="bottom-end">
-      <DropdownTrigger>
-        <button className="text-white px-2 py-1 hover:text-yellow-300 transition-colors flex items-center gap-2 cursor-pointer">
-          Login
-        </button>
-      </DropdownTrigger>
+    // Verifica se está carregando para não piscar conteúdo errado
+    if (status === "loading") {
+        return <button className="text-white px-2">...</button>;
+    }
 
-      <DropdownMenu
-        aria-label="Menu do usuário"
-        className="bg-white/90 backdrop-blur-lg border border-gray-300 shadow-xl rounded-xl py-2"
-        itemClasses={{
-          base: [
-            "rounded-lg",
-            "text-sm",
-            "font-medium",
-            "px-3",
-            "py-2",
-            "transition-colors",
-            "text-gray-700",
+    const isAdmin = session?.user?.role === "admin" 
+    const isLoggedIn = status === "authenticated";
+
+    return (
+        <Dropdown placement="bottom-end">
+            <DropdownTrigger>
+                <button className="text-white px-2 py-1 hover:text-yellow-300 transition-colors flex items-center gap-2 cursor-pointer outline-none">
+                    {/* Muda o texto do botão dependendo se está logado */}
+                    {isLoggedIn ? `Olá, ${session?.user?.name?.split(' ')[0]}` : "Entrar / Menu"}
+                </button>
+            </DropdownTrigger>
+
+<DropdownMenu
+    aria-label="Menu do usuário"
+    className="bg-white/90 backdrop-blur-lg border border-gray-300 shadow-xl rounded-xl py-2"
+    itemClasses={{
+        base: [
+            "rounded-lg", "text-sm", "font-medium", "px-3", "py-2",
+            "transition-colors", "text-gray-700",
             "data-[hover=true]:bg-gray-100",
-            "data-[selectable=true]:focus:bg-gray-200",
-            "data-[pressed=true]:bg-gray-200",
-          ],
-        }}
-      >
-        <DropdownItem key="login" onClick={() => navigate.push("/login")}>
-          Entrar
-        </DropdownItem>
+        ],
+    }}
+>
+            {/* --- CASO 1: NÃO LOGADO (Visitante) --- */}
+            {/* Em vez de array, renderizamos condicionalmente retornando null se falso */}
+            
+            {!isLoggedIn ? (
+                <DropdownItem key="login" onClick={() => router.push("/login")}>
+                    Entrar
+                </DropdownItem>
+            ) : null}
 
-        <DropdownItem
-          key="logout"
-          color="danger"
-          className="text-red-600 font-semibold data-[hover=true]:bg-red-100"
-          onClick={() => signOut({ callbackUrl: "/" })}
-        >
-          Sair
-        </DropdownItem>
-      </DropdownMenu>
-    </Dropdown>
-  );
+
+            {/* --- CASO 2: LOGADO COMO ADMIN --- */}
+            {isLoggedIn && isAdmin ? (
+                <DropdownItem key="dashboard" onClick={() => router.push("/dashboard")}>
+                    Dashboard
+                </DropdownItem>
+            ) : null}
+
+            {isLoggedIn && isAdmin ? (
+                <DropdownItem
+                    key="logout-adm"
+                    className="text-red-600 data-[hover=true]:bg-red-100"
+                    onClick={() => signOut({ callbackUrl: "/" })}
+                >
+                    Sair
+                </DropdownItem>
+            ) : null}
+
+            {/* --- CASO 3: LOGADO COMO USUÁRIO COMUM --- */}
+            {isLoggedIn && !isAdmin ? (
+                <DropdownItem key="meus-dados" onClick={() => router.push("/dados")}>
+                    Meus Dados
+                </DropdownItem>
+            ) : null}
+
+            {isLoggedIn && !isAdmin ? (
+                <DropdownItem
+                    key="logout-user"
+                    className="text-red-600 data-[hover=true]:bg-red-100"
+                    onClick={() => signOut({ callbackUrl: "/" })}
+                >
+                    Sair
+                </DropdownItem>
+            ) : null}
+
+</DropdownMenu>
+        </Dropdown>
+    );
 }
 
 export default DropdownMenuCustom;

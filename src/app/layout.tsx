@@ -1,5 +1,6 @@
 import Bar from "@/components/NavBar/Search_bar";
 import Rodape from "@/components/Rodape";
+import AuthProvider from "@/providers/AuthProvider"; // <--- 1. Importe aqui
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -29,9 +30,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Bar />
-        <main className="flex-1">{children}</main>
-        <Rodape />
+        {/* 2. Envolva tudo que precisa de acesso ao login (Bar e children) */}
+        <AuthProvider>
+            <Bar />
+            <main className="flex-1">{children}</main>
+            <Rodape />
+        </AuthProvider>
       </body>
     </html>
   );
