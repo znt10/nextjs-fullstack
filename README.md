@@ -173,3 +173,5 @@ npm run lint     # Executa linter (ESLint)
 
 
 **Desenvolvido com ❤️ usando Next.js, MongoDB e ☕ café**
+## Deploy
+https://nextjs-fullstack-rosy.vercel.app
