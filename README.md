@@ -8,7 +8,7 @@
 
 
 ## 📖 Teste
-as page de reset-password/[token] , forgot-password, tendei implementar mas ainda nao conseguimos, a senha nao é alterada.
+as page de reset-password/[token] , forgot-password, tentei implementar mas ainda nao conseguimos, a senha nao é alterada.
 
 
 Plataforma web moderna que conecta **candidatos** e **empresas**, facilitando o processo de recrutamento e oferta de vagas de forma rápida, organizada e segura.
